@@ -44,10 +44,21 @@ def save_tasks(tasks):
     with open(TASKS_FILE, "w", encoding="utf-8") as f:
         json.dump(tasks, f, indent=2)
 
+GUILD_ID = int(os.getenv("GUILD_ID", "0"))
+
 @bot.event
 async def on_ready():
-    await bot.tree.sync()
-    print(f"✅ Logged in as {bot.user} (ID: {bot.user.id})", flush=True)
+    if GUILD_ID:
+        guild = discord.Object(id=GUILD_ID)
+        bot.tree.copy_global_to(guild=guild)
+        synced = await bot.tree.sync(guild=guild)
+        print(f"✅ Synced {len(synced)} commands to guild {GUILD_ID}", flush=True)
+    else:
+        synced = await bot.tree.sync()
+        print(f"✅ Synced {len(synced)} global commands (may take time)", flush=True)
+
+    print(f"✅ Logged in as {bot.user}", flush=True)
+
 
 # ======================
 # Moderation (Admin)
