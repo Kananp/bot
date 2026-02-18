@@ -31,7 +31,6 @@ async def on_ready():
     else:
         synced = await bot.tree.sync()
         print(f"✅ Synced {len(synced)} global commands: {[c.name for c in synced]}", flush=True)
-
     print(f"✅ Logged in as {bot.user}", flush=True)
 
 @bot.tree.command(name="ping", description="Test the bot is alive.")
@@ -50,3 +49,4 @@ if not token:
     raise RuntimeError("DISCORD_TOKEN not set.")
 bot.run(token)
 PY
+
