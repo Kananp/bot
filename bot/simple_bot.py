@@ -1,4 +1,4 @@
-cat > simple_bot.py << 'PY'
+tee simple_bot.py >/dev/null <<'PY'
 import os
 import discord
 from discord import app_commands
@@ -42,11 +42,8 @@ async def ping(interaction: discord.Interaction):
 @require_admin()
 @app_commands.describe(name="Role name")
 async def role_create(interaction: discord.Interaction, name: str):
-    try:
-        role = await interaction.guild.create_role(name=name, reason=f"Created by {interaction.user}")
-        await interaction.response.send_message(f"✅ Created role: **{role.name}**", ephemeral=True)
-    except discord.Forbidden:
-        await interaction.response.send_message("❌ Need **Manage Roles** permission.", ephemeral=True)
+    role = await interaction.guild.create_role(name=name, reason=f"Created by {interaction.user}")
+    await interaction.response.send_message(f"✅ Created role: **{role.name}**", ephemeral=True)
 
 token = os.getenv("DISCORD_TOKEN")
 if not token:
